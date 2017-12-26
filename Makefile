@@ -1,14 +1,10 @@
-slave: bin/
+slave:
+	mkdir bin/
 	g++ -Wall -pthread -o bin/piNet slave/main.cpp -lpigpio -lrt
 
 master:
-	g++ -Wall -pthread -o bin/piNet master/main.cpp -lpigpio -lrt
-
-bin_dir:
 	mkdir bin/
-
-obj_dir:
-	mkdir obj/
+	g++ -Wall -pthread -o bin/piNet master/main.cpp -lpigpio -lrt
 
 clean:
 	rm -rf bin/ obj/
