@@ -1,52 +1,14 @@
 #include <unistd.h>
 #include <sys/wait.h>
-#include <pigpio.h>
-#include <iostream>
 
+#include <pigpio.h>
+
+#include <z/core.h>
+#include "messageHeaders.h"
+
+#include <iostream>
 using namespace std;
 
-void ledFlicker(unsigned int PIN, unsigned int cycle_ms, unsigned int ms)
-{
-	if (fork() == 0)
-	{
-		gpioSetMode(PIN, PI_OUTPUT);
-
-		unsigned int t = 0;
-		unsigned int half_cycle_us = cycle_ms*500;
-		unsigned int half_cycle_ms = cycle_ms >> 1;
-		while (t < ms)
-		{
-			unsigned int goal_ms;
-
-			gpioWrite(PIN, 1);
-			goal_ms = t + half_cycle_ms;
-			if (goal_ms >= ms)
-			{
-				usleep((ms - t)*1000);
-				gpioWrite(PIN, 0);
-				exit(0);
-			}
-			else
-				usleep(half_cycle_us);
-
-			t = goal_ms;
-
-			gpioWrite(PIN, 0);
-			goal_ms = t + half_cycle_ms;
-			if (goal_ms >= ms)
-			{
-				usleep((ms - t)*1000);
-				exit(0);
-			}
-			else
-				usleep(half_cycle_us);
-
-			t = goal_ms;
-		}
-
-		exit(0);
-	}
-}
 
 int main()
 {
@@ -56,11 +18,57 @@ int main()
 		return 1;
 	}
 
-	ledFlicker(17, 1000, 3100);
+	char device[] = "/dev/serial0";
+	unsigned int baud = 9600;
 
-	int status;
-	wait(&status);
+	int xBee = serOpen(device, baud, 0);
 
-	gpioWrite(17, 0);
+	char message[128];
+
+	cout << "Message: ";
+	cin >> message;
+	
+	int msgLen = 0;
+	for (int i=0; i<128; i++)
+	{
+		if (message[i] == '\0')
+		{
+			msgLen = i;
+			break;
+		}
+	}
+
+	int error = serWrite(xBee, message, msgLen);
+	if (error)
+	{
+		cout << "ERR: Unable to write to device, ";
+
+		if (error == PI_BAD_HANDLE)
+			cout << "bad handle.\n";
+		else if (error == PI_BAD_PARAM)
+			cout << "bad parameter(s).\n";
+		else if (error == PI_SER_WRITE_FAILED)
+			cout << "serial write failed.\n";
+		else
+			cout << "unknown error.\n";
+	}
+	else
+	{
+		cout << "Writing message '" << message << "' to device '" << device << "' OK.\n";
+		cout << "Waiting for return message... ";
+		usleep(1000000);
+	
+
+		while (!serDataAvailable(xBee));
+
+		cout << "Message recieved.\n";
+	}
+
+	//serWrite(xBee, message, msgLen);
+
+	if (serClose(xBee))
+		cout << "ERR: Unable to close serial device.\n";
+
+
 	gpioTerminate();
 }

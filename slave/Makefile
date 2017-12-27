@@ -1,5 +1,10 @@
-build: main.cpp
-	g++ -Wall -pthread -o piNet main.cpp -lpigpio -lrt
+INCLUDE = /home/pi/GitHub/zLibraries/
+
+piNet: main.o
+	g++ -lpigpio -lrt -o piNet main.o
+
+main.o: main.cpp
+	g++ -Wall -pthread -I/$(INCLUDE) -o main.o -c main.cpp
 
 clean:
-	rm -rf bin/ obj/ piNet
+	rm -rf *.o piNet
