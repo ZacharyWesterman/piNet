@@ -1,4 +1,5 @@
 #pragma once
+#include "message.h"
 
 namespace network
 {
@@ -11,5 +12,8 @@ namespace network
 		messageHandler(unsigned int deviceHandle);
 
 		bool messageWaiting();
+		bool waitNextMessage(message*);
+		void clearMessageBuffer();
+		void waitUntilNoTraffic();
 	};
 }

@@ -14,5 +14,6 @@ namespace network
 		~node();
 
 		int autoAssignID();
+		int assignMasterID();
 	};
 }
