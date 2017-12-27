@@ -17,6 +17,28 @@ namespace network
 		handle = deviceHandle;
 	}
 
+	messageHandler::~messageHandler()
+	{
+	}
+
+	void messageHandler::sync()
+	{
+		if (msg_count == 0)
+			return;
+
+		/*int dataAvail = serDataAvailable(handle);
+		if (dataAvail > 0)
+		{
+			char data
+
+			message msg;
+
+			msg.header = ;
+
+			if (
+		}*/
+	}
+
 	bool messageHandler::messageWaiting()
 	{
 		if (serDataAvailable(handle) > 0)
@@ -40,6 +62,26 @@ namespace network
 		}
 
 		return true;
+	}
+
+	bool messageHandler::IDRequested()
+	{
+		if ((serDataAvailable(handle) == 1) &&
+			(serReadByte(handle) == SEND_IDS))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	bool messageHandler::sendMyID()
+	{
+		char data[2];
+		data[0] = msg->header;
+			data[1] = msg->src;
+
+		serWrite(handle, data, 2);
 	}
 
 	void messageHandler::clearMessageBuffer()

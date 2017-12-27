@@ -48,7 +48,7 @@ namespace network
 
 		if (networkExists)
 		{
-			msgHandler->waitUntilNoTraffic();
+			//msgHandler->waitUntilNoTraffic();
 
 			ID = 0; //PLACEHOLDER
 		}
@@ -58,5 +58,10 @@ namespace network
 		}
 
 		return ID;
+	}
+
+	void replyMessages()
+	{
+		msgHandler.sync(); 
 	}
 }
