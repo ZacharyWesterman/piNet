@@ -9,16 +9,20 @@ void piNetworkRun(int handle, bool master)
 	network::messageHandler handler (handle);
 	network::node thisNode (&handler);
 
-	if (master)
-	{
-		int ID = thisNode.assignMasterID();
+	int ID;
 
-		cout << "Node ID:" << ID << "(master).\n"; 
+	if (master)
+		ID = thisNode.assignMasterID();
+	else
+		ID = thisNode.autoAssignID();
+
+	if (ID < 0)
+	{
+		cout << "ERR: Unable to create node.\n";
+		return;
 	}
 	else
 	{
-		int ID = thisNode.autoAssignID();
-
-		cout << "Node ID:" << ID << "(slave).\n";
+		cout << "Node ID:" << ID << '(' << (ID ? "master" : "slave") << ").\n";
 	}
 }

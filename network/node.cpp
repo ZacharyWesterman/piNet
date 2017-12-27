@@ -25,9 +25,7 @@ namespace network
 
 		if (networkExists)
 		{
-			msgHandler->waitUntilNoTraffic();
-
-			ID = 1; //PLACEHOLDER
+			ID = msgHandler->getAvailSlaveID();
 		}
 		else
 		{

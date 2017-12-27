@@ -13,7 +13,11 @@ namespace network
 
 		bool messageWaiting();
 		bool waitNextMessage(message*);
+
 		void clearMessageBuffer();
 		void waitUntilNoTraffic();
+
+		int getAvailSlaveID();
+		bool ping(unsigned char);
 	};
 }
