@@ -201,12 +201,14 @@ namespace network
 	}
 
 	
-	message* messageHandler::IDRequested()
+	message* messageHandler::IDRequested(nodeID myID)
 	{
 		for(int i=0; i<messages.count(); i++)
 		{
 			message* msg = messages.at(i);
-			if (msg && (msg->header == SEND_ID))
+			if (msg && (msg->header == SEND_ID) &&
+				((msg->dest == myID) || (msg->dest == DEST_ALL))
+				)
 				return msg;
 		}
 		
