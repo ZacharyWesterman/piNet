@@ -1,6 +1,6 @@
 #pragma once
 #include "message.h"
-#include <z/core/array.h>
+#include "messageList.h"
 
 namespace network
 {
@@ -9,22 +9,26 @@ namespace network
 	private:
 		unsigned int handle;
 
-		z::core::array<message> messages;
+		bool activeNodes[MAX_NODE_COUNT];
+		
+		messageList messages;
+		messageList sentMsgs;
+		
+		message* constructMessage(char*, int);
+		int messageExists(message*);
 
 	public:
 		messageHandler(unsigned int deviceHandle);
 		~messageHandler();
 
-		void sync();
+		int sync();
+		
+		int sendMessage(message*);
+		
+		int sendRequestIDs(nodeID myID);
 
-		bool messageWaiting();
-		bool waitNextMessage(message*);
-		bool sendMessage(message*);
-
-		void clearMessageBuffer();
-		void waitUntilNoTraffic();
-
-		int getAvailSlaveID();
-		bool ping(unsigned char);
+		int firstAvailSlaveID();
+		
+		int updateActiveIDs(nodeID myID);
 	};
 }

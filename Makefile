@@ -1,6 +1,5 @@
 ZLIB = -I//home/pi/GitHub/zLibraries/
-CFLAGS = -Wall -pthread
-OBJFILES = main.o piNetworkRun.o network.node.o network.messageHandler.o
+OBJFILES = main.o piNetworkRun.o network.node.o network.messageHandler.o network.messageList.o network.message.o
 
 piNet: $(OBJFILES)
 	g++ -lpigpio -lrt -o piNet $(OBJFILES)
@@ -16,6 +15,12 @@ network.node.o: network/node.cpp
 
 network.messageHandler.o: network/messageHandler.cpp
 	g++ -Wall -pthread $(ZLIB) -o network.messageHandler.o -c network/messageHandler.cpp
+	
+network.messageList.o: network/messageList.cpp
+	g++ -Wall -o network.messageList.o -c network/messageList.cpp
+	
+network.message.o: network/message.cpp
+	g++ -Wall -o network.message.o -c network/message.cpp
 
 clean:
 	rm -rf *.o piNet

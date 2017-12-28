@@ -1,12 +1,13 @@
 #pragma once
 #include "messageHandler.h"
+#include "network.h"
 
 namespace network
 {
 	class node
 	{
 	private:
-		unsigned char ID;
+		nodeID ID;
 		messageHandler* msgHandler;
 
 	public:

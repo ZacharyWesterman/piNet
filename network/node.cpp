@@ -1,4 +1,5 @@
 #include "node.h"
+#include "network.h"
 #include <z/core/timeout.h>
 
 #define NETW_JOIN_TIMEOUT_US	2000000 //2 seconds
@@ -8,42 +9,34 @@ namespace network
 	node::node(messageHandler* handler)
 	{
 		msgHandler = handler;
+		ID = ID_UNASSG;
 	}
 
 	node::~node() {}
 
 	int node::autoAssignID()
 	{
-		z::core::timeout joinTime(NETW_JOIN_TIMEOUT_US);
-
-		bool networkExists = false;
-
-		while (!joinTime.timedOut() && !networkExists)
-		{
-			networkExists = msgHandler->messageWaiting();
-		}
-
-		if (networkExists)
-		{
-			ID = msgHandler->getAvailSlaveID();
-		}
-		else
-		{
-			ID = 1; //no master detected
-		}
-
+		int update = msgHandler->updateActiveIDs(ID);
+		if (update < 0)
+			return update;
+		
+		int newID = msgHandler->firstAvailSlaveID();
+		if (newID < 0)
+			return newID;
+		
+		ID = (nodeID)newID; 
 		return ID;
 	}
 
 	int node::assignMasterID()
 	{
-		z::core::timeout joinTime(NETW_JOIN_TIMEOUT_US);
+		//z::core::timeout joinTime(NETW_JOIN_TIMEOUT_US);
 
 		bool networkExists = false;
 
-		while (!joinTime.timedOut() && !networkExists)
+		//while (!joinTime.timedOut() && !networkExists)
 		{
-			networkExists = msgHandler->messageWaiting();
+			//networkExists = msgHandler->messageWaiting();
 		}
 
 		if (networkExists)
@@ -62,6 +55,6 @@ namespace network
 
 	void replyMessages()
 	{
-		msgHandler.sync(); 
+		//msgHandler.sync(); 
 	}
 }

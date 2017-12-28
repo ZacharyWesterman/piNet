@@ -2,8 +2,8 @@ namespace network
 {	
 	enum messageHeader //single byte
 	{
-		NO_TRAFFIC,
-
+		IGNORE,
+		
 		SEND_IDS,
 		PING_ID,
 		PING_REPLY,
@@ -14,8 +14,17 @@ namespace network
 		REGISTER_MY_KEY,
 		REGISTER_ACCEPT,
 		REGISTER_DENY,
+		EXITING_NETWORK,
+		
+		FALSE_PACKET,
+		BAD_NODE,
+		DID_YOU_SEND,
+		
+		REPLY_ACCEPT,
+		REPLY_DENY,
+		
+		GET_TIME,
 
-		SEND_TO_ALL,
-		SEND_TO_ID
+		SEND_TO,
 	};
 }
