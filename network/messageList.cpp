@@ -1,4 +1,5 @@
 #include "messageList.h"
+
 namespace network
 {
 	messageList::messageList()
@@ -64,7 +65,7 @@ namespace network
 		{
 			if (messages[i])
 			{
-				if (((messages[i])->header == msg->header) &&
+				if ((messages[i]->header == msg->header) &&
 					(messages[i]->dest == msg->dest) &&
 				    (messages[i]->src == msg->src) &&
 					(messages[i]->time == msg->time))
@@ -72,20 +73,21 @@ namespace network
 					return i; //message has already been recieved
 				}
 			}
+				
 		}
 		
-		return 0; //message has not already been recieved
+		return -1; //message has not already been recieved
 	}
 
 	void messageList::add(message* msg)
 	{
 		//if messagebox full, remove oldest message.
-		/*if (messageCount >= MAX_MESSAGE_COUNT)
+		if (messageCount >= MAX_MESSAGE_COUNT)
 		{
 			deleteMessage(messages[0]);
 			messages[0] = NULL;
 		}
-		defrag();*/
+		defrag();
 		
 		messages[messageCount] = msg;
 		messageCount++;
@@ -93,10 +95,10 @@ namespace network
 	
 	message* messageList::at(int index)
 	{
-		if ((index >= 0) && (index < messageCount))
-			return messages[index];
-		else
+		if ((index < 0) || (index >= messageCount))
 			return NULL;
+		else
+			return messages[index];
 	}
 	
 	int messageList::count()

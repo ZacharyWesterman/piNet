@@ -1,6 +1,6 @@
 #include <pigpio.h>
 #include <unistd.h>
-//#include <time.h>
+#include <time.h>
 #include <z/core/timeout.h>
 
 #include "messageHandler.h"
@@ -30,8 +30,6 @@ namespace network
 		
 		for (int i=0; i<MAX_NODE_COUNT; i++)
 			activeNodes[i] = false;
-		//For some reason, works if I uncomment this line.
-		//sentMsgs.add(createMessage());
 	}
 
 	messageHandler::~messageHandler() 
@@ -111,13 +109,13 @@ namespace network
 		//Add available message to the end of the list.
 		//All messages with the same header,dest,src,time
 		//will be ignored.
-		if (messages.exists(msg))
+		if (messages.exists(msg) >= 0)
 		{
 			std::cout << " (previously recieved)\n";
 			deleteMessage(msg);
 			return 0;
 		}
-		else if (sentMsgs.exists(msg))
+		else if (sentMsgs.exists(msg) >= 0)
 		{
 			std::cout << " (previously sent)\n";
 			deleteMessage(msg);
@@ -156,9 +154,10 @@ namespace network
 	int messageHandler::sendRequestIDs(nodeID myID)
 	{
 		message* msg = createMessage();
-		msg->header = SEND_IDS;
+		msg->header = SEND_ID;
 		msg->dest = DEST_ALL;
 		msg->src = myID;
+		msg->time = (timestamp)time(NULL);
 		
 		return sendMessage(msg);
 	}
@@ -199,5 +198,29 @@ namespace network
 		}
 		
 		return 0;
+	}
+
+	
+	message* messageHandler::IDRequested()
+	{
+		for(int i=0; i<messages.count(); i++)
+		{
+			message* msg = messages.at(i);
+			if (msg && (msg->header == SEND_ID))
+				return msg;
+		}
+		
+		return NULL;
+	}
+	
+	int messageHandler::sendReplyID(message* orig, nodeID myID)
+	{
+		message* reply = createMessage();
+		reply->header = MY_ID;
+		reply->dest = orig->src;
+		reply->src = myID;
+		reply->time = (timestamp)time(NULL);
+		
+		return sendMessage(reply);
 	}
 }

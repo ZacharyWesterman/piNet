@@ -26,6 +26,7 @@ void piNetworkRun(int handle, bool master)
 		cout << "Node ID:" << ID << '(' << (ID ? "slave" : "master") << ").\n";
 	}
 
-	//while(true)
-		//thisNode.replyMessages();
+
+	while(true)
+		thisNode.replyMessages();
 }

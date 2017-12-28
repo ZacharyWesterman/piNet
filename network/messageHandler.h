@@ -22,13 +22,14 @@ namespace network
 		~messageHandler();
 
 		int sync();
-		
 		int sendMessage(message*);
 		
 		int sendRequestIDs(nodeID myID);
-
 		int firstAvailSlaveID();
-		
 		int updateActiveIDs(nodeID myID);
+		
+		message* IDRequested();
+		
+		int sendReplyID(message*, nodeID);
 	};
 }

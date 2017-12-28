@@ -4,7 +4,7 @@ namespace network
 	{
 		IGNORE,
 		
-		SEND_IDS,
+		SEND_ID,
 		PING_ID,
 		PING_REPLY,
 		MY_ID,
