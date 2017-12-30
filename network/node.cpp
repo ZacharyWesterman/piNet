@@ -57,7 +57,7 @@ namespace network
 	{
 		msgHandler->sync();
 		
-		message* msg = msgHandler->IDRequested();
+		message* msg = msgHandler->IDRequested(ID);
 		
 		if (msg)
 		{
