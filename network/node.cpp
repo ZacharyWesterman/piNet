@@ -53,15 +53,10 @@ namespace network
 		return ID;
 	}
 
-	void node::replyMessages()
+	int node::replyMessages()
 	{
 		msgHandler->sync();
 		
-		message* msg = msgHandler->IDRequested(ID);
-		
-		if (msg)
-		{
-			msgHandler->sendReplyID(msg, ID);
-		}
+		return msgHandler->sendReplyID(ID);
 	}
 }

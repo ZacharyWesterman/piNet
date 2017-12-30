@@ -203,26 +203,46 @@ namespace network
 	
 	message* messageHandler::IDRequested(nodeID myID)
 	{
-		for(int i=0; i<messages.count(); i++)
+		int index = messages.getFirstOccurrence(SEND_ID);
+		
+		if (index >= 0)
 		{
-			message* msg = messages.at(i);
-			if (msg && (msg->header == SEND_ID) &&
-				((msg->dest == myID) || (msg->dest == DEST_ALL))
-				)
+			message* msg = messages.at(index);
+			
+			
+			if ((msg->dest == myID) || (msg->dest == DEST_ALL))
+			{
+				messages.remove(index);
 				return msg;
+			}
 		}
 		
 		return NULL;
 	}
 	
-	int messageHandler::sendReplyID(message* orig, nodeID myID)
+	int messageHandler::sendReplyID(nodeID myID)
 	{
-		message* reply = createMessage();
-		reply->header = MY_ID;
-		reply->dest = orig->src;
-		reply->src = myID;
-		reply->time = (timestamp)time(NULL);
+		int index = messages.getFirstOccurrence(SEND_ID);
 		
-		return sendMessage(reply);
+		if (index >= 0)
+		{
+			message* msg = messages.at(index);
+			
+			
+			if ((msg->dest == myID) || (msg->dest == DEST_ALL))
+			{
+				message* reply = createMessage();
+				reply->header = MY_ID;
+				reply->dest = msg->src;
+				reply->src = myID;
+				reply->time = (timestamp)time(NULL);
+				
+				messages.remove(index);
+				
+				return sendMessage(reply);
+			}
+		}
+		
+		return 0;
 	}
 }

@@ -93,12 +93,36 @@ namespace network
 		messageCount++;
 	}
 	
+	bool messageList::remove(int index)
+	{
+		if ((index >= 0) && (index < messageCount))
+		{
+			deleteMessage(messages[index]);
+			messages[index] = NULL;
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
 	message* messageList::at(int index)
 	{
 		if ((index < 0) || (index >= messageCount))
 			return NULL;
 		else
 			return messages[index];
+	}
+	
+	int messageList::getFirstOccurrence(msgType type)
+	{
+		for (int i=0; i<messageCount; i++)
+		{
+			if (messages[i] && (messages[i]->header == type))
+				return i;
+		}
+		
+		return -1;
 	}
 	
 	int messageList::count()

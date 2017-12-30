@@ -16,6 +16,6 @@ namespace network
 
 		int autoAssignID();
 		int assignMasterID();
-		void replyMessages();
+		int replyMessages();
 	};
 }

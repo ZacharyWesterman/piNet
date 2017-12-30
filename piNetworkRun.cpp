@@ -27,6 +27,6 @@ void piNetworkRun(int handle, bool master)
 	}
 
 
-	while(true)
-		thisNode.replyMessages();
+	while(!thisNode.replyMessages())
+		;
 }

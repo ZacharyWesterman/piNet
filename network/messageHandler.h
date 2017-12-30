@@ -30,6 +30,6 @@ namespace network
 		
 		message* IDRequested(nodeID);
 		
-		int sendReplyID(message*, nodeID);
+		int sendReplyID(nodeID);
 	};
 }

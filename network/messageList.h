@@ -24,7 +24,10 @@ namespace network
 		void defrag();
 		int exists(message*);
 		void add(message*);
+		bool remove(int);
 		message* at(int);
+		
+		int getFirstOccurrence(msgType);
 		
 		int count();
 	};
