@@ -181,17 +181,21 @@ namespace network
 			activeNodes[i] = false;
 		
 		z::core::timeout time (RESPONSE_TIMEOUT);
-		
+
 		while (!time.timedOut())
 		{
 			sync();
 			
-			message* msg = messages.at(messages.count() - 1);
+			int index = messages.getFirstOccurrence(MY_ID);
 			
-			if (msg && (msg->header == MY_ID))
+			if (index >= 0)
 			{
+				message* msg = messages.at(index);
+				
 				if ((msg->src) < MAX_NODE_COUNT)
 					activeNodes[msg->src] = true;
+					
+				messages.remove(index);
 					
 				time.reset();
 			}
