@@ -26,7 +26,9 @@ namespace network
 		
 		int sendRequestIDs(nodeID myID);
 		int firstAvailSlaveID();
-		int updateActiveIDs(nodeID myID);
+		int requestAllActiveIDs(nodeID myID);
+		
+		void updateActiveIDs();
 		
 		message* IDRequested(nodeID);
 		

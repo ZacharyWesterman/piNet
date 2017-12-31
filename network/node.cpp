@@ -16,7 +16,7 @@ namespace network
 
 	int node::autoAssignID()
 	{
-		int update = msgHandler->updateActiveIDs(ID);
+		int update = msgHandler->requestAllActiveIDs(ID);
 		if (update < 0)
 			return update;
 		
@@ -56,6 +56,7 @@ namespace network
 	int node::replyMessages()
 	{
 		msgHandler->sync();
+		msgHandler->updateActiveIDs();
 		
 		return msgHandler->sendReplyID(ID);
 	}

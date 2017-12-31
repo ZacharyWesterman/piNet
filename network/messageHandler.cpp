@@ -176,7 +176,7 @@ namespace network
 		return -1;
 	}
 	
-	int messageHandler::updateActiveIDs(nodeID myID)
+	int messageHandler::requestAllActiveIDs(nodeID myID)
 	{
 		int reqResult = sendRequestIDs(myID);
 		if (reqResult < 0)
@@ -207,6 +207,37 @@ namespace network
 		}
 		
 		return 0;
+	}
+
+	void messageHandler::updateActiveIDs()
+	{
+		message* msg;
+		
+		int addNode = messages.getFirstOccurrence(MY_ID);
+		if (addNode >= 0)
+		{
+			msg = messages.at(addNode);
+			
+			if ((msg->src) < MAX_NODE_COUNT)
+			{
+				activeNodes[msg->src] = true;
+			}
+			
+			messages.remove(addNode);
+		}
+		
+		int rmvNode = messages.getFirstOccurrence(EXITING_NETWORK);
+		if (rmvNode >= 0)
+		{
+			msg = messages.at(rmvNode);
+			
+			if ((msg->src) < MAX_NODE_COUNT)
+			{
+				activeNodes[msg->src] = false;
+			}
+			
+			messages.remove(rmvNode);
+		}
 	}
 
 	
