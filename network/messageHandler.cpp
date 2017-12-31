@@ -93,6 +93,13 @@ namespace network
 			return 0;
 		}
 		
+		//get rid of bad IGNORE packets
+		int ignorePacket = messages.getFirstOccurrence(IGNORE);
+		while (ignorePacket >= 0)
+		{
+			messages.remove(ignorePacket);
+			ignorePacket = messages.getFirstOccurrence(IGNORE);
+		}
 		
 		//read next available message
 		char msgData[dataAvail];
