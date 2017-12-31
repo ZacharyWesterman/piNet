@@ -14,6 +14,7 @@ namespace network
 		unsigned int data_len;
 	};
 	
-	void deleteMessage(message* msg);
+	void deleteMessage(message*);
 	message* createMessage();
+	message* duplicateMessage(message*);
 }

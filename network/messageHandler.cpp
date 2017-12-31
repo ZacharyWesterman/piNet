@@ -1,6 +1,5 @@
 #include <pigpio.h>
 #include <unistd.h>
-#include <time.h>
 #include <z/core/timeout.h>
 
 #include "messageHandler.h"
@@ -157,7 +156,6 @@ namespace network
 		msg->header = SEND_ID;
 		msg->dest = DEST_ALL;
 		msg->src = myID;
-		msg->time = (timestamp)time(NULL);
 		
 		return sendMessage(msg);
 	}
@@ -239,7 +237,6 @@ namespace network
 				reply->header = MY_ID;
 				reply->dest = msg->src;
 				reply->src = myID;
-				reply->time = (timestamp)time(NULL);
 				
 				messages.remove(index);
 				
